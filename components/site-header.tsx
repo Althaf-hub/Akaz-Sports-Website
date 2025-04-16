@@ -99,7 +99,7 @@ export function SiteHeader() {
             <Button
               variant="outline"
               size="icon"
-              className="hidden md:flex h-10 w-10 border-2 border-[#e7b18e]/30 hover:bg-[#e7b18e]/10 hover:border-[#e7b18e] hover:text-black transition-all duration-300 shadow-sm hover:shadow"
+              className="hidden md:flex h-10 w-10 border-2 border-[#808080]/30 hover:bg-[#e7b18e]/10 hover:border-[#e7b18e] hover:text-black transition-all duration-300 shadow-sm hover:shadow"
               onClick={handleSearchClick}
             >
               <Search className="h-5 w-5" />
