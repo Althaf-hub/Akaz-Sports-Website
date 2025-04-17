@@ -1,11 +1,12 @@
+"use client"
 import { Link } from "react-router-dom"
-import Header from "../components/Header"
-import Footer from "../components/Footer"
+import {SiteHeader} from "../components/site-header"
+import {SiteFooter} from "../components/site-footer"
 
 const NotFoundPage = () => {
   return (
     <>
-      <Header />
+      <SiteHeader />
       <main className="not-found py-16">
         <div className="container text-center">
           <h1 className="text-9xl font-bold text-gradient mb-4">404</h1>
@@ -23,7 +24,7 @@ const NotFoundPage = () => {
           </div>
         </div>
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   )
 }

@@ -1,3 +1,5 @@
+"use client"
+
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { FaTrophy, FaUsers, FaGlobe, FaCheckCircle } from "react-icons/fa"
