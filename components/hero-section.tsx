@@ -115,15 +115,7 @@ export function HeroSection() {
                   Premium sports equipment for athletes who demand excellence. Designed for performance.
                 </p>
               </div>
-              <div className="flex flex-col gap-4 sm:flex-row">
-              
-                <Button
-                  variant="outline"
-                  className=" bg-gradient-to-r from-[#f58549] to-[#eda24e] border-none text-white hover:bg-white hover:text-black px-8 py-6 text-lg rounded-full transition-all duration-300 transform hover:scale-105"
-                >
-                  Explore
-                </Button>
-              </div>
+             
             </div>
             <div className="hidden md:block relative h-full">
               <div className="sticky top-0 h-screen flex items-center">

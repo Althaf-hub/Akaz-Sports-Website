@@ -13,7 +13,7 @@ export const metadata = {
   description: "Your one-stop shop for all sports equipment and gear. Quality products for athletes of all levels.",
   viewport: "width=device-width, initial-scale=1",
   themeColor: "#f58549",
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -23,6 +23,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* ADD this head part */}
+        <link rel="icon" href="/ak.png" sizes="any" />
+        <link rel="icon" href="/ak.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/ak.png" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {children}
@@ -31,7 +37,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-
-import './globals.css'

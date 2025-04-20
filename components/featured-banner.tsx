@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export function FeaturedBanner() {
   return (
@@ -30,9 +31,11 @@ export function FeaturedBanner() {
               </p>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row pt-4">
-              <Button className="bg-gradient-to-r from-[#f58549] to-[#eda24e] text-white hover:bg-gradient-to-r hover:from-[#e07539] hover:to-[#d99239] rounded-full px-8 py-6 text-lg">
-                Shop Collection
-              </Button>
+            <Link href="/products">
+                <Button className="bg-gradient-to-r from-[#f58549] to-[#eda24e] text-white hover:bg-gradient-to-r hover:from-[#e07539] hover:to-[#d99239] rounded-full px-8 py-6 text-lg">
+                  Shop Collection
+                </Button>
+              </Link>
             
             </div>
           </div>
