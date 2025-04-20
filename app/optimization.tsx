@@ -1,5 +1,4 @@
 import React from "react"
-
 // This file contains optimization utilities for the website
 
 // Image optimization
@@ -12,9 +11,9 @@ export const optimizeImage = (src: string, width: number, quality = 80) => {
   return `${src}?w=${width}&q=${quality}`
 }
 
-// Lazy loading helper (corrected version)
-export const lazyLoadComponent = (importFunc: () => Promise<{ default: React.ComponentType<any> }>) => {
-  return React.lazy(importFunc)
+// Lazy loading helper
+export const lazyLoadComponent = (component: React.ComponentType) => {
+  return React.lazy(() => import(component))
 }
 
 // Debounce function for search and filters
@@ -34,13 +33,13 @@ export function debounce<T extends (...args: any[]) => any>(func: T, wait: numbe
 
 // Memoize expensive calculations
 export function memoize<T extends (...args: any[]) => any>(func: T): T {
-  const cache = new Map<string, ReturnType<T>>()
+  const cache = new Map()
 
   return ((...args: Parameters<T>): ReturnType<T> => {
     const key = JSON.stringify(args)
 
     if (cache.has(key)) {
-      return cache.get(key) as ReturnType<T>
+      return cache.get(key)
     }
 
     const result = func(...args)
@@ -49,3 +48,4 @@ export function memoize<T extends (...args: any[]) => any>(func: T): T {
     return result
   }) as T
 }
+

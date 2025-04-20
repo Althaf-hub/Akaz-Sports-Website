@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import {SiteHeader} from "../components/site-header"
 import {SiteFooter} from "../components/site-footer"
 
@@ -15,11 +15,10 @@ const NotFoundPage = () => {
             The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
           </p>
           <div className="flex justify-center gap-4">
-            <Link href="/" className="btn btn-primary">
+            <Link to="/" className="btn btn-primary">
               Back to Home
             </Link>
-            <Link href
-            ="/products" className="btn btn-outline border-[#f58549] text-[#f58549]">
+            <Link to="/products" className="btn btn-outline border-[#f58549] text-[#f58549]">
               Browse Products
             </Link>
           </div>

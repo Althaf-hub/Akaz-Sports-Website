@@ -1,6 +1,5 @@
 
 
-import Head from "next/head"
 import { ProductGrid } from "@/components/product-grid"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
@@ -10,7 +9,7 @@ import { CategoryShowcase } from "@/components/category-showcase"
 import { TestimonialSection } from "@/components/testimonial-section"
 import { BlogSection } from "@/components/blog-section"
 
-
+import Head from "next/head"
 
 export const metadata = {
   title: "AKAZ SPORTS HUB - Premium Sports Equipment",
