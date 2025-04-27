@@ -37,22 +37,28 @@ export function CategoryShowcase() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category) => (
-            <Card key={category.name} className="overflow-hidden group">
-              <CardContent className="p-0">
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-semibold text-white mb-1">{category.name}</h3>
-                    <p className="text-white/80 text-sm">{category.count} products</p>
+            <Link 
+              key={category.name}
+              href={`/products?category=${encodeURIComponent(category.name)}`}
+              className="group"
+            >
+              <Card className="overflow-hidden group">
+                <CardContent className="p-0">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <h3 className="text-xl font-semibold text-white mb-1">{category.name}</h3>
+                      <p className="text-white/80 text-sm">{category.count} products</p>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
         <div className="text-center mt-8">
@@ -64,4 +70,3 @@ export function CategoryShowcase() {
     </section>
   )
 }
-

@@ -51,7 +51,7 @@ const allProducts = [
     name: "Crystal grip",
     category: "Socks",
     price: "price soon",
-    image: "/images/Socks/s1.png",
+    image: "/images/socks/s1.png",
     rating: 4.7,
     reviews: 64,
     brand: "Captain",
