@@ -1,13 +1,14 @@
 "use client"
 
 import { Canvas } from "@react-three/fiber"
-import { PresentationControls, Environment, useGLTF, Float, Text, Sparkles } from "@react-three/drei"
+import { PresentationControls, Environment, Float, Text, Sparkles } from "@react-three/drei"
 import { Suspense, useRef, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useFrame } from "@react-three/fiber"
 import * as THREE from 'three'
 import Image from "next/image"
 import Link from "next/link"
+import { motion } from "framer-motion"
 
 function SoccerBoot() {
   const modelRef = useRef<THREE.Group>(null)
@@ -60,36 +61,7 @@ const heroImages = [
 ]
 
 export function HeroSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
-  const imageRef = useRef<HTMLDivElement>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sectionRef.current && contentRef.current) {
-        const scrollPosition = window.scrollY
-        const sectionTop = sectionRef.current.offsetTop
-        const sectionHeight = sectionRef.current.offsetHeight
-        const scrollPercentage = (scrollPosition - sectionTop) / sectionHeight
-
-        if (scrollPercentage >= 0 && scrollPercentage <= 1) {
-          contentRef.current.style.transform = `translateY(${scrollPercentage * 50}px)`
-          contentRef.current.style.opacity = `${1 - scrollPercentage}`
-        }
-      }
-
-      if (imageRef.current) {
-        const scrollPosition = window.scrollY
-        const translateY = scrollPosition * 0.2
-        const scale = 1 + (scrollPosition * 0.0005)
-        imageRef.current.style.transform = `translateY(${translateY}px) scale(${scale})`
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -100,30 +72,58 @@ export function HeroSection() {
   }, [])
 
   return (
-    <div ref={sectionRef} className="relative w-full min-h-screen bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
-      <div className="absolute inset-0 z-10">
+    <div className="relative w-full min-h-screen bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="absolute inset-0 z-10"
+      >
         <div className="container h-full mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
-            <div ref={contentRef} className="flex flex-col justify-center space-y-8 text-white transition-all duration-300">
+            <motion.div 
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="flex flex-col justify-center space-y-8 text-white"
+            >
               <div className="space-y-6">
                 <h1 className="text-6xl font-bold tracking-tighter sm:text-7xl md:text-8xl lg:text-9xl leading-tight">
                   <span className="bg-gradient-to-r from-[#f58549] to-[#eda24e] bg-clip-text text-transparent">AKAZ</span>{" "}
                   <span className="text-white">SPORTS</span>{" "}
                   <span className="bg-gradient-to-r from-[#eda24e] to-[#f58549] bg-clip-text text-transparent">HUB</span>
                 </h1>
-                <p className="mt-6 text-xl text-gray-300 max-w-md leading-relaxed font-['Poppins']">
+                <motion.p 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.8 }}
+                  className="mt-6 text-xl text-gray-300 max-w-md leading-relaxed font-['Poppins']"
+                >
                   Premium sports equipment for athletes who demand excellence. Designed for performance.
-                </p>
+                </motion.p>
               </div>
-             
-            </div>
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1.1 }}
+              >
+                <Link href="/products">
+                  <Button className="bg-gradient-to-r from-[#f58549] to-[#eda24e] text-white hover:opacity-90 px-8 py-3 rounded-full text-lg">
+                    Explore Products
+                  </Button>
+                </Link>
+              </motion.div>
+            </motion.div>
+            
             <div className="hidden md:block relative h-full">
               <div className="sticky top-0 h-screen flex items-center">
                 <div className="relative w-full h-[90vh] overflow-hidden rounded-2xl">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent z-10" />
-                  <div 
-                    ref={imageRef}
-                    className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-xl overflow-hidden transition-transform duration-300"
+                  <motion.div 
+                    initial={{ scale: 1.1, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-xl overflow-hidden"
                   >
                     {heroImages.map((image, index) => (
                       <Image
@@ -137,18 +137,7 @@ export function HeroSection() {
                         priority={index === 0}
                       />
                     ))}
-                  </div>
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
-                    {heroImages.map((_, index) => (
-                      <button
-                        key={index}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                          index === currentImageIndex ? "bg-white w-4" : "bg-white/50"
-                        }`}
-                        onClick={() => setCurrentImageIndex(index)}
-                      />
-                    ))}
-                  </div>
+                  </motion.div>
                   <Canvas className="absolute inset-0 z-20" dpr={[1, 2]} camera={{ position: [0, 0, 8], fov: 45 }}>
                     <Suspense fallback={null}>
                       <ambientLight intensity={0.5} />
@@ -171,7 +160,7 @@ export function HeroSection() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
       <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-0"></div>
     </div>
   )
