@@ -27,12 +27,13 @@ export function Hero() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+    hidden: { opacity: 0, y: 60, scale: 0.9, filter: "blur(15px)" },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       filter: "blur(0px)",
-      transition: { duration: 0.8, ease: [0.25, 0.4, 0.2, 1] as const },
+      transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] as const },
     },
   };
 
@@ -44,21 +45,49 @@ export function Hero() {
       {/* Dynamic Background Elements */}
       <motion.div style={{ y, opacity }} className="absolute inset-0 z-0 pointer-events-none">
         {/* Background Image */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
+        <motion.img 
           src="/images/hero-bg-2.png" 
           alt="Female runner at starting blocks" 
           className="absolute inset-0 w-full h-full object-cover object-[center_top] opacity-80"
+          animate={{ scale: [1, 1.05, 1], opacity: [0.8, 0.9, 0.8] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         
         {/* Dark Overlays for Text Readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
         <div className="absolute inset-0 bg-black/30 mix-blend-multiply" />
         
-        {/* Geometric Grid (Subtle Texture) */}
-        <div 
-          className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] opacity-50"
-          style={{ backgroundSize: '4rem 4rem', transform: 'perspective(1000px) rotateX(60deg) scale(2.5) translateY(-20%)', transformOrigin: 'top center' }}
+        {/* Floating Ambient Orbs */}
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/20 rounded-full blur-[100px]"
+          animate={{ 
+            x: [0, 100, -50, 0],
+            y: [0, -50, 100, 0],
+            scale: [1, 1.2, 0.8, 1]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-zinc-500/20 rounded-full blur-[120px]"
+          animate={{ 
+            x: [0, -100, 50, 0],
+            y: [0, 100, -50, 0],
+            scale: [1, 1.5, 0.9, 1]
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Geometric Grid (Moving Texture) */}
+        <motion.div 
+          className="absolute inset-0 opacity-40"
+          style={{ 
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
+            backgroundSize: '4rem 4rem', 
+            transform: 'perspective(1000px) rotateX(60deg) scale(2.5)', 
+            transformOrigin: 'top center' 
+          }}
+          animate={{ backgroundPosition: ['0px 0px', '0px 4rem'] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
         />
       </motion.div>
 
@@ -104,21 +133,25 @@ export function Hero() {
           variants={itemVariants}
           className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto"
         >
-          <Link
-            href="/products"
-            className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-white px-10 py-5 text-sm font-black uppercase tracking-widest text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              Shop Now
-              <MoveRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </span>
-          </Link>
-          <Link
-            href="/categories"
-            className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/20 glass px-10 py-5 text-sm font-black uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-white/40"
-          >
-            Explore Gear
-          </Link>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/products"
+              className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-white px-10 py-5 text-sm font-black uppercase tracking-widest text-black transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)]"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                Shop Now
+                <MoveRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </span>
+            </Link>
+          </motion.div>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/categories"
+              className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/20 glass px-10 py-5 text-sm font-black uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-white/40"
+            >
+              Explore Gear
+            </Link>
+          </motion.div>
         </motion.div>
       </motion.div>
 
