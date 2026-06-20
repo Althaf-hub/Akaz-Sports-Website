@@ -66,7 +66,7 @@ export function Header() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`flex items-center justify-between rounded-full px-6 py-3 transition-all duration-500 ${
-              isScrolled ? "glass shadow-[0_0_30px_rgba(0,0,0,0.5)]" : "bg-transparent"
+              isScrolled ? "backdrop-blur-2xl bg-black/40 border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)]" : "bg-transparent border border-transparent"
             }`}
           >
             <Link href="/" className="relative z-50 flex items-center gap-2 group">

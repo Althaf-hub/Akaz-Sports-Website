@@ -61,6 +61,7 @@ export const metadata: Metadata = {
   },
 };
 
+import { LenisProvider } from "@/components/providers/lenis-provider";
 import { WishlistProvider } from "@/context/wishlist-context";
 
 export default function RootLayout({
@@ -74,13 +75,15 @@ export default function RootLayout({
       className={`dark ${inter.variable} ${oswald.variable} h-full antialiased selection:bg-primary selection:text-white`}
     >
       <body className="min-h-full flex flex-col bg-black text-white font-sans overflow-x-hidden">
-        <WishlistProvider>
-          <Header />
-          <main className="flex-1 flex flex-col w-full relative z-0">
-            {children}
-          </main>
-          <Footer />
-        </WishlistProvider>
+        <LenisProvider>
+          <WishlistProvider>
+            <Header />
+            <main className="flex-1 flex flex-col w-full relative z-0">
+              {children}
+            </main>
+            <Footer />
+          </WishlistProvider>
+        </LenisProvider>
       </body>
     </html>
   );
