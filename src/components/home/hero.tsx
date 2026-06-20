@@ -75,43 +75,29 @@ export function Hero() {
       {/* Background Layers (Scroll + Mouse Parallax) */}
       <motion.div style={{ y: scrollY, opacity: scrollOpacity, x: bgX, y: bgY }} className="absolute inset-0 z-0 pointer-events-none scale-105">
 
-        {/* Main Athlete Image */}
+        {/* Stacked Collage Images */}
+        {/* Image 1: Top Left */}
         <motion.img
-          src="/images/hero-bg-2.png"
-          alt="Athlete"
-          className="absolute inset-0 w-full h-full object-cover object-[center_top] opacity-80"
+          src="/images/sisyphus.jpg"
+          alt="Collage 1"
+          className="absolute top-[20%] left-[7%] w-[250px] sm:w-[350px] h-[350px] sm:h-[450px] object-cover rounded-2xl opacity-98 rotate-[-8deg] shadow-2xl"
+        />
+        {/* Image 2: Bottom Right */}
+        <motion.img
+          src="/images/shoe.jpg"
+          alt="Collage 2"
+          className="absolute bottom-[15%] right-[6%] w-[200px] sm:w-[300px] h-[300px] sm:h-[400px] object-cover rounded-2xl opacity-94 rotate-[6deg] shadow-2xl"
         />
 
-        {/* Cinematic Lighting: Blue Ambient */}
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[150px] mix-blend-screen translate-x-1/3 -translate-y-1/3" />
-
-        {/* Cinematic Lighting: Primary Accent */}
-        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-primary/30 rounded-full blur-[150px] mix-blend-screen -translate-x-1/3 translate-y-1/3" />
-
-        {/* Dark Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/10" />
-        <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
-      </motion.div>
-
-      {/* Particle System (Smoke & Light Streaks) */}
-      <motion.div style={{ x: smokeX, y: scrollY }} className="absolute inset-0 z-0 pointer-events-none opacity-60">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-[600px] h-[400px] bg-zinc-400/10 rounded-full blur-[100px]"
-          animate={{ x: [0, 200, 0], y: [0, 100, 0], rotate: [0, 45, 0], scale: [1, 1.2, 1] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-[800px] h-[600px] bg-zinc-500/10 rounded-full blur-[120px]"
-          animate={{ x: [0, -200, 0], y: [0, -100, 0], rotate: [0, -45, 0], scale: [1, 1.3, 1] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        />
-        {/* Light streak */}
-        <motion.div
-          className="absolute top-1/3 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent blur-sm rotate-12"
-          animate={{ opacity: [0, 1, 0], x: ["-100%", "100%"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        {/* Image 5: Center Back */}
+        <motion.img
+          src="/images/sisyphus.jpg"
+          alt="Collage 5"
+          className="absolute top-[30%] left-[40%] w-[300px] sm:w-[450px] h-[400px] sm:h-[550px] object-cover rounded-2xl opacity-20 rotate-[3deg] shadow-2xl -z-10 blur-sm"
         />
       </motion.div>
+
+
 
       {/* Foreground Content */}
       <motion.div
