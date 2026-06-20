@@ -78,32 +78,34 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       </nav>
 
       {/* Main Product Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-        {/* Left — Image */}
-        <div className="space-y-4">
-          <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-white border border-white/5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32 items-start">
+        {/* Left — Images (Scrollable) */}
+        <div className="lg:col-span-7 flex flex-col gap-6">
+          <div className="relative aspect-square sm:aspect-[4/5] w-full overflow-hidden rounded-3xl bg-zinc-900/30 backdrop-blur-2xl border border-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.5)] group">
             {mainImage ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={mainImage}
                 alt={images?.[0]?.alt || String(product.name)}
-                className="absolute inset-0 w-full h-full object-contain p-8"
+                className="absolute inset-0 w-full h-full object-contain p-12 transition-transform duration-700 ease-out group-hover:scale-105"
               />
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-zinc-600 text-sm">
+              <div className="absolute inset-0 flex items-center justify-center text-zinc-600 text-sm font-medium uppercase tracking-widest">
                 No image available
               </div>
             )}
+            {/* Cinematic overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none mix-blend-multiply opacity-50" />
           </div>
 
           {/* Thumbnail strip */}
           {images && images.length > 1 && (
-            <div className="flex gap-3 overflow-x-auto">
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-4">
               {images.slice(1).map((img, i) =>
                 img.src ? (
-                  <div key={i} className="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-white border border-white/5 cursor-pointer">
+                  <div key={i} className="relative aspect-square rounded-2xl overflow-hidden bg-zinc-900/40 backdrop-blur-md border border-white/5 cursor-pointer hover:border-white/20 transition-all hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:-translate-y-1">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={img.src} alt={img.alt || ""} className="w-full h-full object-contain p-2" />
+                    <img src={img.src} alt={img.alt || ""} className="w-full h-full object-contain p-3" />
                   </div>
                 ) : null
               )}
@@ -111,73 +113,83 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           )}
         </div>
 
-        {/* Right — Info */}
-        <div className="flex flex-col gap-5">
-          {/* Brand */}
-          {brands?.[0]?.name && (
-            <span className="text-xs font-bold text-primary uppercase tracking-[0.2em]">
-              {brands[0].name}
-            </span>
-          )}
+        {/* Right — Info (Sticky) */}
+        <div className="lg:col-span-5 flex flex-col gap-8 sticky top-32">
+          <div className="flex flex-col gap-4">
+            {/* Brand */}
+            {brands?.[0]?.name && (
+              <span className="inline-flex items-center px-3 py-1 rounded-full border border-primary/20 bg-primary/10 text-[10px] font-black text-primary uppercase tracking-widest w-fit shadow-[0_0_20px_rgba(0,87,255,0.15)]">
+                {brands[0].name}
+              </span>
+            )}
 
-          {/* Name */}
-          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
-            {String(product.name)}
-          </h1>
+            {/* Name */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[0.9] drop-shadow-lg uppercase">
+              {String(product.name)}
+            </h1>
+            
+            {/* Categories */}
+            {cats && cats.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {cats.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    href={`/categories/${cat.slug}`}
+                    className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-white transition-colors"
+                  >
+                    {cat.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
 
-          {/* Categories */}
-          {cats && cats.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {cats.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/categories/${cat.slug}`}
-                  className="text-xs font-semibold uppercase tracking-widest text-zinc-400 bg-zinc-900 border border-white/10 rounded-full px-3 py-1 hover:border-primary hover:text-primary transition-colors"
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </div>
-          )}
+          <div className="w-full h-px bg-gradient-to-r from-white/10 to-transparent" />
 
           {/* Short description */}
           {shortDesc && (
-            <p className="text-zinc-400 leading-relaxed">{shortDesc}</p>
+            <p className="text-zinc-400 leading-relaxed text-lg font-medium drop-shadow-md">
+              {shortDesc}
+            </p>
           )}
-
-          {/* Removed View on store button as requested */}
 
           {/* Full description */}
           {description && (
-            <div className="mt-4 pt-6 border-t border-white/5">
-              <h2 className="text-sm font-bold text-white uppercase tracking-widest mb-3">Description</h2>
-              <p className="text-zinc-400 leading-relaxed text-sm">{description}</p>
+            <div className="pt-6">
+              <h2 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-4">Product Details</h2>
+              <p className="text-zinc-400 leading-relaxed text-sm font-medium">{description}</p>
             </div>
           )}
+          
+          {/* Decorative Elements */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
         </div>
       </div>
 
       {/* Related Products */}
       {related.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-black text-white uppercase tracking-tight mb-6">
-            Related <span className="text-primary">Products</span>
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="pt-16 border-t border-white/5">
+          <div className="flex items-end justify-between mb-10">
+            <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter drop-shadow-lg">
+              Complete <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-400 to-zinc-600">The Kit</span>
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {related.map((p) => {
               const pImages = p.images as { src?: string; alt?: string }[] | undefined;
               const pSrc = pImages?.[0]?.src ?? null;
               return (
-                <Link key={String(p.id)} href={`/products/${p.slug}`} className="group flex flex-col gap-3">
-                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-white border border-white/5 hover:border-white/20 transition-colors">
+                <Link key={String(p.id)} href={`/products/${p.slug}`} className="group flex flex-col gap-4 transition-all duration-500 hover:-translate-y-2">
+                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-zinc-900/30 backdrop-blur-xl border border-white/5 shadow-lg group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.4)] group-hover:border-white/20 transition-all duration-500">
                     {pSrc ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={pSrc} alt={pImages?.[0]?.alt || String(p.name)} className="absolute inset-0 w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" />
+                      <img src={pSrc} alt={pImages?.[0]?.alt || String(p.name)} className="absolute inset-0 w-full h-full object-contain p-6 group-hover:scale-110 transition-transform duration-700 ease-[0.16,1,0.3,1]" />
                     ) : (
-                      <div className="absolute inset-0 bg-zinc-900" />
+                      <div className="absolute inset-0 bg-zinc-900/50" />
                     )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none mix-blend-multiply" />
                   </div>
-                  <h3 className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">{String(p.name)}</h3>
+                  <h3 className="text-lg font-black text-white group-hover:text-primary transition-colors leading-tight drop-shadow-md px-2">{String(p.name)}</h3>
                 </Link>
               );
             })}

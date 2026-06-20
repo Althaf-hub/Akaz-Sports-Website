@@ -135,7 +135,7 @@ export function Hero() {
         {/* Pseudo-3D Headline */}
         <motion.h1
           variants={itemVariants}
-          className="text-[4rem] sm:text-7xl md:text-[9rem] font-black tracking-tighter text-white mb-6 uppercase leading-[0.85] w-full mix-blend-screen"
+          className="text-5xl sm:text-7xl md:text-[9rem] font-black tracking-tighter text-white mb-6 uppercase leading-[0.9] sm:leading-[0.85] w-full mix-blend-screen"
         >
           <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]">
             Push
@@ -156,12 +156,12 @@ export function Hero() {
         {/* Magnetic CTA Buttons */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto z-20"
+          className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto z-20 px-4 sm:px-0"
         >
           <MagneticButton>
             <Link
               href="/products"
-              className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-white px-10 py-5 text-sm font-black uppercase tracking-widest text-black transition-all shadow-[0_10px_40px_rgba(255,255,255,0.2)] hover:shadow-[0_15px_50px_rgba(255,255,255,0.5)]"
+              className="group relative flex w-full sm:inline-flex items-center justify-center overflow-hidden rounded-full bg-white px-8 py-4 sm:px-10 sm:py-5 text-sm font-black uppercase tracking-widest text-black transition-all shadow-[0_10px_40px_rgba(255,255,255,0.2)] hover:shadow-[0_15px_50px_rgba(255,255,255,0.5)]"
             >
               <span className="relative z-10 flex items-center gap-2">
                 Shop Now
@@ -171,12 +171,16 @@ export function Hero() {
           </MagneticButton>
 
           <MagneticButton>
-            <Link
-              href="/categories"
-              className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl px-10 py-5 text-sm font-black uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-white/30 shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
+            <a
+              href="#trending"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('trending')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="group flex w-full sm:inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl px-8 py-4 sm:px-10 sm:py-5 text-sm font-black uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-white/30 shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
             >
               Explore Gear
-            </Link>
+            </a>
           </MagneticButton>
         </motion.div>
       </motion.div>

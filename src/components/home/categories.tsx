@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { ScrollReveal, ScrollParallax } from "@/components/ui/scroll-reveal";
 
 async function getCategoriesFromProducts() {
   try {
@@ -64,12 +64,14 @@ export async function Categories() {
                 }`}
               >
                 {category.image && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-60 group-hover:opacity-80"
-                  />
+                  <ScrollParallax speed={0.15} className="absolute inset-0 h-[130%] -top-[15%] w-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-60 group-hover:opacity-80"
+                    />
+                  </ScrollParallax>
                 )}
                 {!category.image && (
                   <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 to-black opacity-80" />
