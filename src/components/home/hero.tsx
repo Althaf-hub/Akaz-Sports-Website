@@ -73,28 +73,29 @@ export function Hero() {
       style={{ perspective: "1000px" }}
     >
       {/* Background Layers (Scroll + Mouse Parallax) */}
-      <motion.div style={{ y: scrollY, opacity: scrollOpacity, x: bgX, y: bgY }} className="absolute inset-0 z-0 pointer-events-none scale-105">
+      <motion.div style={{ y: scrollY, opacity: scrollOpacity }} className="absolute inset-0 z-0 pointer-events-none scale-105">
+        <motion.div style={{ x: bgX, y: bgY }} className="w-full h-full absolute inset-0">
+          {/* Stacked Collage Images */}
+          {/* Image 1: Top Left */}
+          <motion.img
+            src="/images/sisyphus.jpg"
+            alt="Collage 1"
+            className="absolute top-[20%] left-[7%] w-[250px] sm:w-[350px] h-[350px] sm:h-[450px] object-cover rounded-2xl opacity-98 rotate-[-8deg] shadow-2xl"
+          />
+          {/* Image 2: Bottom Right */}
+          <motion.img
+            src="/images/shoe.jpg"
+            alt="Collage 2"
+            className="absolute bottom-[15%] right-[6%] w-[200px] sm:w-[300px] h-[300px] sm:h-[400px] object-cover rounded-2xl opacity-94 rotate-[6deg] shadow-2xl"
+          />
 
-        {/* Stacked Collage Images */}
-        {/* Image 1: Top Left */}
-        <motion.img
-          src="/images/sisyphus.jpg"
-          alt="Collage 1"
-          className="absolute top-[20%] left-[7%] w-[250px] sm:w-[350px] h-[350px] sm:h-[450px] object-cover rounded-2xl opacity-98 rotate-[-8deg] shadow-2xl"
-        />
-        {/* Image 2: Bottom Right */}
-        <motion.img
-          src="/images/shoe.jpg"
-          alt="Collage 2"
-          className="absolute bottom-[15%] right-[6%] w-[200px] sm:w-[300px] h-[300px] sm:h-[400px] object-cover rounded-2xl opacity-94 rotate-[6deg] shadow-2xl"
-        />
-
-        {/* Image 5: Center Back */}
-        <motion.img
-          src="/images/sisyphus.jpg"
-          alt="Collage 5"
-          className="absolute top-[30%] left-[40%] w-[300px] sm:w-[450px] h-[400px] sm:h-[550px] object-cover rounded-2xl opacity-20 rotate-[3deg] shadow-2xl -z-10 blur-sm"
-        />
+          {/* Image 5: Center Back */}
+          <motion.img
+            src="/images/sisyphus.jpg"
+            alt="Collage 5"
+            className="absolute top-[30%] left-[40%] w-[300px] sm:w-[450px] h-[400px] sm:h-[550px] object-cover rounded-2xl opacity-20 rotate-[3deg] shadow-2xl -z-10 blur-sm"
+          />
+        </motion.div>
       </motion.div>
 
 
