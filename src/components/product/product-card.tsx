@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Heart, Tag } from "lucide-react";
 import { type Product } from "@/types";
 import { getFormattedPrice, getFormattedRegularPrice, getProductBrand, getDiscountPercent } from "@/lib/api";
@@ -11,7 +12,6 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  // Use plain <img> — NOT next/image — so external URLs are never blocked by remotePatterns
   const imageSrc = product.images?.[0]?.src ?? null;
   const imageAlt = product.images?.[0]?.alt || product.name;
   const discount   = getDiscountPercent(product);
@@ -23,19 +23,17 @@ export function ProductCard({ product }: ProductCardProps) {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isWishlisted = isInWishlist(product.id);
 
-  // Debug log (server-side — shows in terminal)
-  console.log(`[ProductCard] ${product.name} | imageSrc=${imageSrc ?? "NONE"} | categories=${product.categories?.map(c => c.name).join(", ") || "NONE"}`);
-
   return (
     <div className="group relative flex flex-col gap-4 transition-all duration-500 hover:-translate-y-2 hover:z-10">
       {/* ── Image Container ─────────────────────────────────────────────── */}
       <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-zinc-900/30 backdrop-blur-xl border border-white/5 group-hover:border-white/20 transition-all duration-500 shadow-lg group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
         <Link href={detailHref} className="absolute inset-0 z-0" aria-label={product.name}>
           {imageSrc ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={imageSrc}
               alt={imageAlt}
+              fill
+              sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
               className="absolute inset-0 w-full h-full object-contain p-6 object-center transition-transform duration-700 ease-[0.16,1,0.3,1] group-hover:scale-110"
             />
           ) : (

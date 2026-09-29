@@ -1,20 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const oswald = Oswald({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  display: "swap",
-});
+const siteUrl = new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000");
 
 export const viewport: Viewport = {
   themeColor: "#000000",
@@ -24,7 +13,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://akazsportshub.com"),
+  metadataBase: siteUrl,
   title: {
     default: "Akaz Sports Hub | Premium Sports Gear",
     template: "%s | Akaz Sports Hub",
@@ -33,16 +22,17 @@ export const metadata: Metadata = {
   keywords: ["sports gear", "athletic wear", "shoes", "fitness", "Akaz Sports Hub", "premium activewear"],
   authors: [{ name: "Akaz Sports Hub" }],
   creator: "Akaz Sports Hub",
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://akazsportshub.com",
+    url: "/",
     title: "Akaz Sports Hub | Premium Sports Gear",
     description: "Unleash your true potential with premium sports gear, footwear, and apparel.",
     siteName: "Akaz Sports Hub",
     images: [
       {
-        url: "/og-image.jpg", // Placeholder
+        url: "/images/hero-bg.png",
         width: 1200,
         height: 700,
         alt: "Akaz Sports Hub",
@@ -54,6 +44,7 @@ export const metadata: Metadata = {
     title: "Akaz Sports Hub | Premium Sports Gear",
     description: "Unleash your true potential with premium sports gear, footwear, and apparel.",
     creator: "@akazsportshub",
+    images: ["/images/hero-bg.png"],
   },
   robots: {
     index: true,
@@ -72,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${oswald.variable} h-full antialiased selection:bg-primary selection:text-white`}
+      className="dark h-full antialiased selection:bg-primary selection:text-white"
     >
       <body className="min-h-full flex flex-col bg-black text-white font-sans overflow-x-hidden">
         <LenisProvider>

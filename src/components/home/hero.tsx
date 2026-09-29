@@ -33,8 +33,6 @@ export function Hero() {
   const fgX = useTransform(smoothMouseX, [-0.5, 0.5], ["2%", "-2%"]);
   const fgY = useTransform(smoothMouseY, [-0.5, 0.5], ["2%", "-2%"]);
 
-  const smokeX = useTransform(smoothMouseX, [-0.5, 0.5], ["-5%", "5%"]);
-
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX / window.innerWidth - 0.5);

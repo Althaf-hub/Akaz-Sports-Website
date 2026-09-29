@@ -39,11 +39,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
-
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -141,7 +136,7 @@ export function Header() {
                 )}
               </Link>
 
-              <button aria-label="Cart Locked" className="text-zinc-600 cursor-not-allowed relative group transition-colors duration-200" title="Cart is currently locked">
+              <button type="button" disabled aria-label="Cart coming soon" className="text-zinc-600 cursor-not-allowed relative group transition-colors duration-200" title="Cart coming soon — purchasing is not available yet">
                 <ShoppingBag className="h-5 w-5 opacity-50" />
                 <span className="absolute -bottom-1 -right-1 bg-zinc-950 rounded-full p-0.5 border border-zinc-800 flex items-center justify-center">
                   <Lock className="h-2.5 w-2.5 text-zinc-500" />

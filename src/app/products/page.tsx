@@ -3,12 +3,12 @@ import { getProducts, getCategories } from "@/lib/api";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductFilters } from "@/components/product/product-filters";
 import { Pagination } from "@/components/product/pagination";
-import { ProductsLoadingSkeleton } from "@/components/product/product-skeleton";
 import type { SortBy, SortOrder } from "@/types";
+import type { Metadata } from "next";
 import { AlertCircle, PackageSearch } from "lucide-react";
 
-export const metadata = {
-  title: "Products | Akaz Sports Hub",
+export const metadata: Metadata = {
+  title: "Products",
   description:
     "Browse our premium collection of sports gear — gym gloves, belts, support accessories, jerseys and more.",
 };
@@ -18,8 +18,10 @@ interface ProductsPageProps {
     page?: string;
     search?: string;
     category?: string;
-    orderby?: string;
-    order?: string;
+  orderby?: string;
+  order?: string;
+  on_sale?: string;
+  stock_status?: string;
   }>;
 }
 
@@ -32,6 +34,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const category = params.category;
   const orderby = params.orderby as SortBy | undefined;
   const order = params.order as SortOrder | undefined;
+  const onSale = params.on_sale === "true";
+  const stockStatus = ["instock", "outofstock", "onbackorder"].includes(params.stock_status ?? "")
+    ? (params.stock_status as "instock" | "outofstock" | "onbackorder")
+    : undefined;
 
   // Fetch products + categories in parallel, each with independent error handling
   let products: Awaited<ReturnType<typeof getProducts>>["products"] = [];
@@ -48,19 +54,14 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       category,
       orderby,
       order,
+      on_sale: onSale || undefined,
+      stock_status: stockStatus,
     }),
     getCategories(true),
   ]);
 
   if (productsResult.status === "fulfilled") {
-    let fetchedProducts = productsResult.value.products;
-    
-    // If no specific ordering is requested, randomize the products on the page
-    if (!orderby) {
-      fetchedProducts = [...fetchedProducts].sort(() => Math.random() - 0.5);
-    }
-    
-    products = fetchedProducts;
+    products = productsResult.value.products;
     totalPages = productsResult.value.totalPages;
     totalProducts = productsResult.value.totalProducts;
   } else {
@@ -124,11 +125,11 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           </div>
         }
       >
-        <ProductFilters categories={categories} />
+      <ProductFilters categories={categories} />
       </Suspense>
 
       {/* Active filters summary */}
-      {(search || category) && (
+      {(search || category || onSale || stockStatus) && (
         <div className="mb-6 flex flex-wrap gap-2 items-center">
           <span className="text-xs text-zinc-500 uppercase tracking-widest">Filtered by:</span>
           {search && (
@@ -141,6 +142,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               Category: {categories.find((c) => String(c.id) === category)?.name}
             </span>
           )}
+          {onSale && <span className="inline-flex items-center rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary">On sale</span>}
+          {stockStatus && <span className="inline-flex items-center rounded-full bg-zinc-800 border border-white/10 px-3 py-1 text-xs font-semibold text-zinc-300">{stockStatus === "instock" ? "In stock" : stockStatus === "outofstock" ? "Out of stock" : "On backorder"}</span>}
         </div>
       )}
 

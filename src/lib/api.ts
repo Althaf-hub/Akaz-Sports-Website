@@ -1,7 +1,7 @@
 /**
  * WooCommerce Store API – Reusable Fetch Functions
  *
- * Base URL: https://akazsportshub.com/wp-json/wc/store
+ * Base URL: NEXT_PUBLIC_WC_STORE_API_URL
  * Docs: https://github.com/woocommerce/woocommerce/blob/trunk/plugins/woocommerce/src/StoreApi/README.md
  *
  * All functions are safe for use in:
@@ -10,6 +10,7 @@
  *  - Client Components (via /api/* proxy routes — to be built later)
  */
 
+import { cache } from "react";
 import type {
   Product,
   ProductBrand,
@@ -21,9 +22,7 @@ import type {
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_WC_STORE_API_URL ??
-  "https://akazsportshub.com/wp-json/wc/store";
+const BASE_URL = process.env.NEXT_PUBLIC_WC_STORE_API_URL?.replace(/\/$/, "");
 
 /** Default Next.js fetch cache options (1 hour ISR). Override per call. */
 const DEFAULT_CACHE: RequestInit = {
@@ -41,9 +40,10 @@ async function apiFetch<T>(
   endpoint: string,
   init: RequestInit = {}
 ): Promise<{ data: T; headers: Headers }> {
+  if (!BASE_URL) {
+    throw new Error("WooCommerce Store API URL is not configured.");
+  }
   const url = `${BASE_URL}${endpoint}`;
-
-  console.log(`[WC API] Fetching: ${url}`);
 
   const res = await fetch(url, {
     headers: { "Content-Type": "application/json" },
@@ -59,7 +59,6 @@ async function apiFetch<T>(
   }
 
   const data: T = await res.json();
-  console.log(`[WC API] ✅ Success: ${url}`);
   return { data, headers: res.headers };
 }
 
@@ -114,9 +113,6 @@ export function extractCategoriesFromProducts(
     a.name.localeCompare(b.name)
   );
 
-  console.log(
-    `[WC API] extractCategoriesFromProducts → found ${result.length} unique categories`
-  );
   return result;
 }
 
@@ -168,29 +164,8 @@ export async function getProducts(
     const totalProducts = parseInt(headers.get("x-wp-total") ?? "0", 10);
     const totalPages = parseInt(headers.get("x-wp-totalpages") ?? "1", 10);
 
-    console.log(
-      `[WC API] getProducts → ${products.length} products, page ${page}/${totalPages}, total ${totalProducts}`
-    );
-
-    // Validate key fields on first product
-    if (products.length > 0) {
-      const sample = products[0];
-      console.log("[WC API] Sample product fields:", {
-        id: sample.id,
-        name: sample.name,
-        slug: sample.slug,
-        permalink: sample.permalink,
-        images: sample.images?.length ?? 0,
-        categories: sample.categories?.map((c) => c.name),
-        brands: (sample as Product & { brands?: { name: string }[] }).brands?.map((b) => b.name),
-        currency: sample.prices?.currency_symbol,
-        price: sample.prices?.price,
-      });
-    }
-
     return { products, totalProducts, totalPages, currentPage: page };
   } catch (err) {
-    console.error("[WC API] getProducts failed:", err);
     throw err; // Re-throw so Next.js error.tsx picks it up
   }
 }
@@ -202,7 +177,7 @@ export async function getProducts(
  * @example
  * const product = await getProductBySlug("adidas-football");
  */
-export async function getProductBySlug(slug: string): Promise<Product | null> {
+export const getProductBySlug = cache(async (slug: string): Promise<Product | null> => {
   if (!slug) return null;
 
   try {
@@ -212,18 +187,12 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     const list = Array.isArray(data) ? data : [];
     const product = list[0] ?? null;
 
-    if (product) {
-      console.log(`[WC API] getProductBySlug("${slug}") → found: ${product.name}`);
-    } else {
-      console.warn(`[WC API] getProductBySlug("${slug}") → not found`);
-    }
-
     return product;
   } catch (err) {
-    console.error(`[WC API] getProductBySlug("${slug}") failed:`, err);
+    console.error("WooCommerce product lookup failed.", err);
     return null;
   }
-}
+});
 
 /**
  * Fetch a single product by its numeric WooCommerce ID.
@@ -237,10 +206,9 @@ export async function getProductById(id: number): Promise<Product | null> {
 
   try {
     const { data } = await apiFetch<Product>(`/products/${id}`);
-    console.log(`[WC API] getProductById(${id}) → ${data?.name ?? "not found"}`);
     return data ?? null;
   } catch (err) {
-    console.error(`[WC API] getProductById(${id}) failed:`, err);
+    console.error("WooCommerce product lookup failed.", err);
     return null;
   }
 }
@@ -256,11 +224,10 @@ export async function searchProducts(
   keyword: string,
   options: Omit<ProductsQueryParams, "search"> = {}
 ): Promise<ProductsResponse> {
-  console.log(`[WC API] searchProducts("${keyword}")`);
   try {
     return await getProducts({ ...options, search: keyword });
   } catch (err) {
-    console.error(`[WC API] searchProducts("${keyword}") failed:`, err);
+    console.error("WooCommerce product search failed.", err);
     throw err;
   }
 }
@@ -275,11 +242,10 @@ export async function getProductsByCategory(
   categoryId: number | string,
   options: Omit<ProductsQueryParams, "category"> = {}
 ): Promise<ProductsResponse> {
-  console.log(`[WC API] getProductsByCategory(${categoryId})`);
   try {
     return await getProducts({ ...options, category: categoryId });
   } catch (err) {
-    console.error(`[WC API] getProductsByCategory(${categoryId}) failed:`, err);
+    console.error("WooCommerce category product lookup failed.", err);
     throw err;
   }
 }
@@ -342,78 +308,26 @@ export async function getRelatedProducts(
  * @example
  * const { categories } = await getCategories();
  */
-export async function getCategories(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _hideEmpty = true
-): Promise<CategoriesResponse> {
-  // ── Step 1: Always derive categories from real product data ─────────────
-  let productDerived: ProductCategory[] = [];
+export async function getCategories(hideEmpty = true): Promise<CategoriesResponse> {
+  const categories: ProductCategory[] = [];
+  const knownIds = new Set<number>();
+  let page = 1;
 
-  try {
-    const { products } = await getProducts({ per_page: 100 });
-    productDerived = extractCategoriesFromProducts(products);
-    console.log(
-      `[WC API] getCategories (primary) → extracted ${productDerived.length} categories from ${products.length} products`
+  while (true) {
+    const { data, headers } = await apiFetch<ProductCategory[]>(
+      `/products/categories${buildQuery({ page, per_page: 100, hide_empty: hideEmpty })}`
     );
-  } catch (err) {
-    console.error("[WC API] getCategories primary fetch failed:", err);
-    // Still attempt the API endpoint below
+    const batch = Array.isArray(data) ? data : [];
+    const added = batch.filter((category) => !knownIds.has(category.id));
+    added.forEach((category) => knownIds.add(category.id));
+    categories.push(...added);
+
+    const totalPages = Number(headers.get("x-wp-totalpages"));
+    if (batch.length === 0 || added.length === 0 || (Number.isFinite(totalPages) && page >= totalPages) || batch.length < 100) break;
+    page += 1;
   }
 
-  // ── Step 2: Try /products/categories in parallel to enrich data ─────────
-  let fromEndpoint: ProductCategory[] = [];
-
-  try {
-    const query = buildQuery({ per_page: 100, hide_empty: true });
-    const { data } = await apiFetch<ProductCategory[]>(
-      `/products/categories${query}`
-    );
-    fromEndpoint = Array.isArray(data) ? data : [];
-    console.log(
-      `[WC API] getCategories (supplement) → /products/categories returned ${fromEndpoint.length} entries`
-    );
-  } catch (err) {
-    console.warn(
-      "[WC API] /products/categories endpoint failed (non-fatal — using product-derived categories):",
-      err
-    );
-  }
-
-  // ── Step 3: Merge — product-derived categories win on identity ───────────
-  // Enrich product-derived entries with image/count from the API if available
-  const enrichmentMap = new Map<number, ProductCategory>();
-  for (const cat of fromEndpoint) {
-    enrichmentMap.set(cat.id, cat);
-  }
-
-  const enriched = productDerived.map((cat) => {
-    const extra = enrichmentMap.get(cat.id);
-    if (!extra) return cat;
-    return {
-      ...cat,
-      // Supplement fields from the API that product objects lack
-      count: extra.count ?? cat.count,
-      image: extra.image ?? cat.image,
-      description: extra.description ?? cat.description,
-      permalink: extra.permalink,
-    };
-  });
-
-  // If product-derived is empty (products fetch failed), fall back to API endpoint result
-  const finalCategories = enriched.length > 0 ? enriched : fromEndpoint;
-
-  console.log(
-    `[WC API] getCategories final → ${finalCategories.length} categories ready`
-  );
-
-  if (finalCategories.length === 0) {
-    console.error(
-      "[WC API] ❌ Both category strategies returned 0 results. " +
-      "Check that products have .categories[] populated."
-    );
-  }
-
-  return { categories: finalCategories };
+  return { categories: categories.sort((a, b) => a.name.localeCompare(b.name)) };
 }
 
 /**
@@ -435,9 +349,22 @@ export async function getCategoryBySlug(
     const list = Array.isArray(data) ? data : [];
     return list[0] ?? null;
   } catch (err) {
-    console.error(`[WC API] getCategoryBySlug("${slug}") failed:`, err);
+    console.error("WooCommerce category lookup failed.", err);
     return null;
   }
+}
+
+/** Fetch every catalog product for SEO output only; normal UI should stay paginated. */
+export async function getAllProducts(): Promise<Product[]> {
+  const firstPage = await getProducts({ page: 1, per_page: 100, orderby: "date", order: "desc" });
+  if (firstPage.totalPages <= 1) return firstPage.products;
+
+  const remaining = await Promise.all(
+    Array.from({ length: firstPage.totalPages - 1 }, (_, index) =>
+      getProducts({ page: index + 2, per_page: 100, orderby: "date", order: "desc" })
+    )
+  );
+  return [firstPage.products, ...remaining.map((page) => page.products)].flat();
 }
 
 // ─── Price Helpers ────────────────────────────────────────────────────────────

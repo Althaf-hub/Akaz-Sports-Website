@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // WooCommerce Store API – Type Definitions
-// Base URL: https://akazsportshub.com/wp-json/wc/store
+// Base URL: configured by NEXT_PUBLIC_WC_STORE_API_URL
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ─── Images ──────────────────────────────────────────────────────────────────

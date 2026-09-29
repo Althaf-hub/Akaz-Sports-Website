@@ -33,7 +33,7 @@ export default function WishlistPage() {
           </div>
           <h3 className="text-2xl font-bold text-white mb-2">Your wishlist is empty</h3>
           <p className="text-zinc-500 max-w-sm mb-6">
-            You haven't saved any products yet. Browse our catalog and click the heart icon to add items here.
+            You haven&apos;t saved any products yet. Browse our catalog and click the heart icon to add items here.
           </p>
           <Link 
             href="/products" 

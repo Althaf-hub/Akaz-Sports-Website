@@ -22,11 +22,11 @@ export async function FeaturedProducts() {
       }
     }
     
-    // Fill the rest randomly up to 4
+    // Complete the selection in deterministic Store API order.
     const remaining = allProducts.filter(p => !selected.some(s => s.id === p.id));
-    const randomRemaining = remaining.sort(() => 0.5 - Math.random()).slice(0, 4 - selected.length);
+    const remainingProducts = remaining.slice(0, 4 - selected.length);
     
-    products = [...selected, ...randomRemaining];
+    products = [...selected, ...remainingProducts];
   } catch (err) {
     console.error("[FeaturedProducts] fetch failed:", err);
   }

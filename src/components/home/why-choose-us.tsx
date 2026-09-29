@@ -37,7 +37,7 @@ export function WhyChooseUs() {
               Why Choose <span className="text-primary">Akaz</span>
             </h2>
             <p className="text-zinc-400 max-w-2xl text-lg font-medium">
-              We don't just sell equipment; we provide the foundation for your athletic journey. Here's why athletes trust us.
+              We don&apos;t just sell equipment; we provide the foundation for your athletic journey. Here&apos;s why athletes trust us.
             </p>
           </div>
         </ScrollReveal>

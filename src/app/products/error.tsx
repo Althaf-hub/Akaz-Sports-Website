@@ -24,7 +24,7 @@ export default function ErrorBoundary({
         Something went wrong!
       </h2>
       <p className="text-zinc-400 max-w-md mb-8">
-        We couldn't load the products. This might be due to a temporary network issue or a problem with our servers.
+        We couldn&apos;t load the products. This might be due to a temporary network issue or a problem with our servers.
       </p>
       <button
         onClick={() => reset()}

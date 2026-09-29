@@ -15,116 +15,31 @@ export function Footer() {
             <p className="text-sm text-zinc-400">
               Premium sports gear and apparel for the modern athlete. Elevate your performance.
             </p>
-            <div className="flex gap-4 mt-4">
-              <Link href="#" className="text-zinc-400 hover:text-white transition-colors text-sm font-bold">
-                IG
-                <span className="sr-only">Instagram</span>
-              </Link>
-              <Link href="#" className="text-zinc-400 hover:text-white transition-colors text-sm font-bold">
-                TW
-                <span className="sr-only">Twitter</span>
-              </Link>
-              <Link href="#" className="text-zinc-400 hover:text-white transition-colors text-sm font-bold">
-                FB
-                <span className="sr-only">Facebook</span>
-              </Link>
-              <Link href="#" className="text-zinc-400 hover:text-white transition-colors text-sm font-bold">
-                YT
-                <span className="sr-only">YouTube</span>
-              </Link>
-            </div>
           </div>
 
           <div>
             <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">Shop</h3>
             <ul className="flex flex-col gap-3">
               <li>
-                <Link href="/categories/men" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Men's Collection
+                <Link href="/products" className="text-sm text-zinc-400 hover:text-white transition-colors">
+                  All Products
                 </Link>
               </li>
-              <li>
-                <Link href="/categories/women" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Women's Collection
-                </Link>
-              </li>
-              <li>
-                <Link href="/categories/footwear" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Footwear
-                </Link>
-              </li>
-              <li>
-                <Link href="/categories/accessories" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Accessories
-                </Link>
-              </li>
-              <li>
-                <Link href="/sale" className="text-sm text-primary hover:text-primary/80 transition-colors">
-                  Clearance Sale
-                </Link>
-              </li>
+              <li><Link href="/categories" className="text-sm text-zinc-400 hover:text-white transition-colors">Categories</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">Support</h3>
             <ul className="flex flex-col gap-3">
-              <li>
-                <Link href="/help" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link href="/track-order" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Track Order
-                </Link>
-              </li>
-              <li>
-                <Link href="/returns" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Returns & Exchanges
-                </Link>
-              </li>
-              <li>
-                <Link href="/shipping" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Shipping Info
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Contact Us
-                </Link>
-              </li>
+              <li><span className="text-sm text-zinc-500">Cart and checkout coming soon</span></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">Company</h3>
             <ul className="flex flex-col gap-3">
-              <li>
-                <Link href="/about" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/careers" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Careers
-                </Link>
-              </li>
-              <li>
-                <Link href="/stores" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Store Locator
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
+              <li><Link href="/wishlist" className="text-sm text-zinc-400 hover:text-white transition-colors">Wishlist</Link></li>
             </ul>
           </div>
         </div>

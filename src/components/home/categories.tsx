@@ -1,35 +1,10 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ScrollReveal, ScrollParallax } from "@/components/ui/scroll-reveal";
-
-async function getCategoriesFromProducts() {
-  try {
-    const res = await fetch(
-      "https://akazsportshub.com/wp-json/wc/store/products?per_page=100",
-      { next: { revalidate: 3600 } }
-    );
-    const products: Record<string, unknown>[] = await res.json();
-
-    const seen = new Map<number, { id: number; name: string; slug: string; image: string | null }>();
-    for (const product of products) {
-      const cats = product.categories as { id: number; name: string; slug: string }[] | undefined;
-      if (!Array.isArray(cats)) continue;
-      for (const cat of cats) {
-        if (!cat.id || !cat.name || !cat.slug) continue;
-        if (!seen.has(cat.id)) {
-          const imgs = product.images as { src?: string }[] | undefined;
-          seen.set(cat.id, { id: cat.id, name: cat.name, slug: cat.slug, image: imgs?.[0]?.src ?? null });
-        }
-      }
-    }
-    return Array.from(seen.values()).sort((a, b) => a.name.localeCompare(b.name));
-  } catch {
-    return [];
-  }
-}
+import { getCategories } from "@/lib/api";
 
 export async function Categories() {
-  const categories = await getCategoriesFromProducts();
+  const { categories } = await getCategories(true);
   const display = categories.slice(0, 4);
 
   if (display.length === 0) return null;
@@ -63,17 +38,17 @@ export async function Categories() {
                   index === 0 ? "aspect-square lg:aspect-[4/3]" : "aspect-square"
                 }`}
               >
-                {category.image && (
+                {category.image?.src && (
                   <ScrollParallax speed={0.15} className="absolute inset-0 h-[130%] -top-[15%] w-full">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={category.image}
+                      src={category.image.src}
                       alt={category.name}
                       className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-60 group-hover:opacity-80"
                     />
                   </ScrollParallax>
                 )}
-                {!category.image && (
+                {!category.image?.src && (
                   <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 to-black opacity-80" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />

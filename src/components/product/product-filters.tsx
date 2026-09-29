@@ -112,6 +112,28 @@ export function ProductFilters({ categories }: ProductFiltersProps) {
           ))}
         </select>
 
+        <select
+          aria-label="Availability"
+          className="bg-zinc-900 border border-white/5 rounded-full px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all appearance-none pr-10 cursor-pointer"
+          value={searchParams.get("stock_status") || ""}
+          onChange={(event) => router.push(`/products?${createQueryString("stock_status", event.target.value)}`)}
+        >
+          <option value="">Any availability</option>
+          <option value="instock">In stock</option>
+          <option value="outofstock">Out of stock</option>
+          <option value="onbackorder">On backorder</option>
+        </select>
+
+        <label className="inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold text-zinc-300 whitespace-nowrap">
+          <input
+            type="checkbox"
+            checked={searchParams.get("on_sale") === "true"}
+            onChange={(event) => router.push(`/products?${createQueryString("on_sale", event.target.checked ? "true" : "")}`)}
+            className="accent-primary"
+          />
+          On sale
+        </label>
+
         {/* Sort Select */}
         <select
           className="bg-zinc-900 border border-white/5 rounded-full px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all appearance-none pr-10 cursor-pointer"

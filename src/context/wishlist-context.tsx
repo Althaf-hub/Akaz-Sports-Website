@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useRef, ReactNode } from "react";
 import { Product } from "@/types";
 
 interface WishlistContextType {
@@ -14,25 +14,23 @@ const WishlistContext = createContext<WishlistContextType | undefined>(undefined
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
   const [wishlist, setWishlist] = useState<Product[]>([]);
-  const [mounted, setMounted] = useState(false);
+  const hydrated = useRef(false);
 
   useEffect(() => {
-    setMounted(true);
     const saved = localStorage.getItem("akaz_wishlist");
-    if (saved) {
-      try {
-        setWishlist(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse wishlist from local storage", e);
+    queueMicrotask(() => {
+      if (saved) {
+        try { setWishlist(JSON.parse(saved)); } catch (e) { console.error("Failed to parse wishlist from local storage", e); }
       }
-    }
+      hydrated.current = true;
+    });
   }, []);
 
   useEffect(() => {
-    if (mounted) {
+    if (hydrated.current) {
       localStorage.setItem("akaz_wishlist", JSON.stringify(wishlist));
     }
-  }, [wishlist, mounted]);
+  }, [wishlist]);
 
   const addToWishlist = (product: Product) => {
     setWishlist((prev) => {
