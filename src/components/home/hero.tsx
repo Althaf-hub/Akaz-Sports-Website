@@ -122,10 +122,12 @@ export function Hero() {
           variants={itemVariants}
           className="text-5xl sm:text-7xl md:text-[9rem] font-black tracking-tighter text-white mb-6 uppercase leading-[0.9] sm:leading-[0.85] w-full mix-blend-screen"
         >
-          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]">
+          {/* SEO-optimised hidden heading for search engines */}
+          <span className="sr-only">Akaz Sports Hub – Qatar&apos;s #1 Sports Hub | Premium Compression Wear, Footwear &amp; Sports Gear in Qatar</span>
+          <span aria-hidden="true" className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]">
             Push
           </span>
-          <span className="block relative text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-zinc-600 drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]">
+          <span aria-hidden="true" className="block relative text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-zinc-600 drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]">
             Beyond<span className="text-primary drop-shadow-[0_0_30px_rgba(0,87,255,0.8)]">.</span>
           </span>
         </motion.h1>
@@ -135,7 +137,7 @@ export function Hero() {
           variants={itemVariants}
           className="max-w-2xl text-lg sm:text-xl text-zinc-300 mb-12 font-medium drop-shadow-2xl"
         >
-          Premium gear for those who refuse to settle. Focus your mind, fuel your drive, and elevate your performance.
+          Qatar&apos;s premier sports hub. Premium compression wear, footwear &amp; gear for those who refuse to settle — fuel your drive at Akaz Sports Hub.
         </motion.p>
 
         {/* Magnetic CTA Buttons */}

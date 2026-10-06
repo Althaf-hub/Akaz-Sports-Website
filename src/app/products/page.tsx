@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Products",
   description:
     "Browse our premium collection of sports gear — gym gloves, belts, support accessories, jerseys and more.",
+  alternates: { canonical: "/products" },
 };
 
 interface ProductsPageProps {

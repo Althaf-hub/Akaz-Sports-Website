@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getProductBySlug, getRelatedProducts } from "@/lib/api";
 import { ProductDetail } from "@/components/product/product-detail";
+import { SITE_URL } from "@/lib/site";
 
 interface ProductDetailPageProps { params: Promise<{ slug: string }>; }
 
@@ -25,6 +26,26 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const description = textFromHtml(product.short_description || product.description);
   const minorUnit = product.prices.currency_minor_unit ?? 2;
   const amount = Number.parseInt(product.on_sale ? product.prices.sale_price : product.prices.price, 10) / Math.pow(10, minorUnit);
-  const productSchema = { "@context": "https://schema.org", "@type": "Product", name: product.name, description: description || undefined, image: product.images.map((image) => image.src), sku: product.sku || undefined, brand: product.brands[0] ? { "@type": "Brand", name: product.brands[0].name } : undefined, offers: Number.isFinite(amount) && amount > 0 ? { "@type": "Offer", priceCurrency: product.prices.currency_code, price: amount, availability: product.is_in_stock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock", url: `/products/${product.slug}` } : undefined };
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: description || undefined,
+    image: product.images.map((image) => image.src),
+    sku: product.sku || undefined,
+    brand: product.brands[0] ? { "@type": "Brand", name: product.brands[0].name } : undefined,
+    offers: Number.isFinite(amount) && amount > 0
+      ? {
+          "@type": "Offer",
+          priceCurrency: product.prices.currency_code,
+          price: amount,
+          availability: product.is_in_stock
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+          // Must be absolute URL for Google structured data validation
+          url: `${SITE_URL}/products/${product.slug}`,
+        }
+      : undefined,
+  };
   return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema).replace(/</g, "\\u003c") }} /><ProductDetail product={product} related={related} /></>;
 }

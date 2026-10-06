@@ -24,9 +24,9 @@ import type {
 
 const BASE_URL = process.env.NEXT_PUBLIC_WC_STORE_API_URL?.replace(/\/$/, "");
 
-/** Default Next.js fetch cache options (1 hour ISR). Override per call. */
+/** Default Next.js fetch cache options (10 min ISR). Override per call. */
 const DEFAULT_CACHE: RequestInit = {
-  next: { revalidate: 3600 },
+  next: { revalidate: 600 },
 };
 
 // ─── Internal helpers ─────────────────────────────────────────────────────────

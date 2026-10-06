@@ -6,22 +6,22 @@ export function WhyChooseUs() {
     {
       icon: Truck,
       title: "Fast Delivery",
-      description: "Free express shipping on all orders over $100. Get your gear when you need it.",
+      description: "Free express shipping on qualifying orders across Qatar and the GCC. Get your Akaz Sports gear when you need it.",
     },
     {
       icon: ShieldCheck,
       title: "Premium Quality",
-      description: "Authentic, top-tier products sourced directly from the world's best sports brands.",
+      description: "Authentic, top-tier products — compression wear, footwear, and equipment — sourced directly from the world's best sports brands.",
     },
     {
       icon: RotateCcw,
       title: "Easy Returns",
-      description: "30-day hassle-free return policy. If it doesn't fit right, send it back.",
+      description: "30-day hassle-free return policy. If your sports gear doesn't fit right, send it back — no questions asked.",
     },
     {
       icon: CreditCard,
       title: "Secure Checkout",
-      description: "100% secure payments with end-to-end encryption for your peace of mind.",
+      description: "100% secure payments with end-to-end encryption. Shop Qatar's premier sports hub with complete peace of mind.",
     },
   ];
 
@@ -37,7 +37,7 @@ export function WhyChooseUs() {
               Why Choose <span className="text-primary">Akaz</span>
             </h2>
             <p className="text-zinc-400 max-w-2xl text-lg font-medium">
-              We don&apos;t just sell equipment; we provide the foundation for your athletic journey. Here&apos;s why athletes trust us.
+              We don&apos;t just sell sports equipment — Akaz Sports Hub provides the foundation for your athletic journey in Qatar and the GCC. Here&apos;s why athletes trust us.
             </p>
           </div>
         </ScrollReveal>
