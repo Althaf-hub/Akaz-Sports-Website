@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ScrollReveal, ScrollParallax } from "@/components/ui/scroll-reveal";
-import { getCategories } from "@/lib/api";
+import { getTopLevelCategories } from "@/lib/api";
 
 export async function Categories() {
-  const { categories } = await getCategories(true);
-  const display = categories.slice(0, 4);
+  // Fetch all top-level categories that have products; id 15 is the generic
+  // "Product Category" placeholder and is explicitly excluded.
+  const display = await getTopLevelCategories();
 
   if (display.length === 0) return null;
 
@@ -24,7 +25,11 @@ export async function Categories() {
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div
+          className={`grid grid-cols-1 md:grid-cols-2 ${
+            display.length >= 4 ? "lg:grid-cols-4" : `lg:grid-cols-${display.length}`
+          } gap-4 sm:gap-6`}
+        >
           {display.map((category, index) => (
             <ScrollReveal
               key={category.id}

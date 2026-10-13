@@ -332,7 +332,16 @@ export async function getCategories(hideEmpty = true): Promise<CategoriesRespons
 
 /**
  * Fetch a single category by its slug.
- * Returns `null` when not found.
+ *
+ * The WooCommerce Store API silently ignores the `?slug=` query param and
+ * returns ALL categories regardless of what is passed, so we CANNOT rely on
+ * `results[0]`.  Instead we:
+ *  1. Fetch up to 100 categories in one request (sufficient for most stores).
+ *  2. Find the entry whose `.slug` **exactly** matches the requested slug.
+ *  3. Return `null` (caller should call `notFound()`) when there is no match.
+ *
+ * Diagnostic log lines let you verify the matched slugs in the server log:
+ *   [getCategoryBySlug] available slugs: gym-gloves, socks, bag, shorts, …
  *
  * @example
  * const category = await getCategoryBySlug("cricket");
@@ -344,13 +353,51 @@ export async function getCategoryBySlug(
 
   try {
     const { data } = await apiFetch<ProductCategory[]>(
-      `/products/categories${buildQuery({ slug })}`
+      `/products/categories${buildQuery({ per_page: 100, hide_empty: true })}`
     );
     const list = Array.isArray(data) ? data : [];
-    return list[0] ?? null;
+
+    // Diagnostic: log all available slugs so we can verify gym-gloves / socks / bag / shorts
+    const availableSlugs = list.map((c) => c.slug).join(", ");
+    console.log(`[getCategoryBySlug] slug="${slug}" | available slugs: ${availableSlugs}`);
+
+    const matched = list.find((c) => c.slug === slug) ?? null;
+
+    if (!matched) {
+      console.warn(`[getCategoryBySlug] No category found for slug="${slug}"`);
+    } else {
+      console.log(`[getCategoryBySlug] Resolved slug="${slug}" → id=${matched.id} name="${matched.name}"`);
+    }
+
+    return matched;
   } catch (err) {
-    console.error("WooCommerce category lookup failed.", err);
+    console.error("[getCategoryBySlug] WooCommerce category lookup failed.", err);
     return null;
+  }
+}
+
+/**
+ * Fetch all top-level product categories that have at least one product,
+ * excluding the generic "Product Category" parent (id 15).
+ *
+ * Used by the homepage "Shop By Category" section so every real category
+ * is shown rather than a hardcoded subset.
+ *
+ * @example
+ * const topLevel = await getTopLevelCategories();
+ */
+export async function getTopLevelCategories(): Promise<ProductCategory[]> {
+  try {
+    const { data } = await apiFetch<ProductCategory[]>(
+      `/products/categories${buildQuery({ per_page: 100, hide_empty: true })}`
+    );
+    const list = Array.isArray(data) ? data : [];
+
+    // id 15 is the generic "Product Category" placeholder — skip it
+    return list.filter((c) => c.parent === 0 && c.id !== 15);
+  } catch (err) {
+    console.error("[getTopLevelCategories] WooCommerce category lookup failed.", err);
+    return [];
   }
 }
 
